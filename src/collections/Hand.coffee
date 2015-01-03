@@ -3,8 +3,20 @@ class window.Hand extends Backbone.Collection
 
   initialize: (array, @deck, @isDealer) ->
 
+  stand: ->
+    console.log 'sent stand trigger'
+    @trigger 'stand' #@
+
   hit: ->
-    @add(@deck.pop())
+    currentScore = @scores()
+    if Math.min(currentScore[0], currentScore[1]) < 22
+      console.log "Hit "
+      @add(@deck.pop())
+      console.log @scores()
+    currentScore = @scores()
+    if Math.min(currentScore[0], currentScore[1]) > 21
+      @trigger 'bust'
+
 
   hasAce: -> @reduce (memo, card) ->
     memo or card.get('value') is 1
